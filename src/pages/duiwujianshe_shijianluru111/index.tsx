@@ -2514,18 +2514,23 @@ const TableListzsgc: React.FC = () => {
           // console.log(selectedRowsState)
           // setDaorusheshiminjingdetaildata(selectedRowsState)
           // actionRef.current?.reloadAndRest?.();
-          if (selectedRowsState) {
+          if (selectedRowsState.length > 0) {
             // actionRef?.current?.addEditRecord({createtable: selectedRowsState})
             // console.log(selectedRowsState)
-            formRef?.current?.setFieldsValue({createtable: selectedRowsState});
+            const currentCreatetable = formRef?.current?.getFieldValue('createtable') || [];
+            const mergedCreatetable = [...currentCreatetable, ...selectedRowsState].reduce((list, item) => {
+              const itemKey = item.id || item.staffPoliceid || item.policeId;
+              const exists = list.some((current: any) => (current.id || current.staffPoliceid || current.policeId) === itemKey);
+              return exists ? list : [...list, item];
+            }, [] as any[]);
+            formRef?.current?.setFieldsValue({createtable: mergedCreatetable});
+            setSelectedRows([]);
             // actionRef?.current?.
 
             setTimeout(() => {
-              setEditableRowKeys2(() => selectedRowsState.map(v => v.id))
-              // console.log(selectedRowsState.map(v => v.id), editableKeys2)
+              setEditableRowKeys2(() => mergedCreatetable.map(v => v.id))
+              // console.log(mergedCreatetable.map(v => v.id), editableKeys2)
             }, 0)
-          } else if (!selectedRowsState) {
-            formRef?.current?.resetFields()
           }
           // const success = await chaxunneirong(value as chaxunjieguoTableListItem);
           // setChaxunModalVisible(false)
