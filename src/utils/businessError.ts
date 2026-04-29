@@ -29,7 +29,8 @@ const formatChineseNumber = (value: string | number | undefined) => {
   return `${digitText[ten]}十${unit ? digitText[unit] : ''}`;
 };
 
-export const formatRowErrorMessages = (response: BusinessErrorResponse) => {
+export const formatRowErrorMessages = (input: BusinessErrorResponse & { data?: BusinessErrorResponse; info?: BusinessErrorResponse }) => {
+  const response = input?.success === false ? input : input?.data || input?.info;
   if (response?.success !== false || !Array.isArray(response.errorMsg) || response.errorMsg.length === 0) {
     return '';
   }

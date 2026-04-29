@@ -368,7 +368,7 @@ const TableListzsgc: React.FC = () => {
     const hide = message.loading('正在添加');
 
     try {
-      const res = await addinformationRule({...fields});
+      const res = await addinformationRule({...fields}, {skipErrorHandler: true});
       hide();
       const errorMessage = formatRowErrorMessages(res as any);
       if (errorMessage) {
@@ -379,7 +379,8 @@ const TableListzsgc: React.FC = () => {
       return true;
     } catch (error) {
       hide();
-      message.error('添加失败请重试！');
+      const errorMessage = formatRowErrorMessages(error as any);
+      message.error(errorMessage || '添加失败请重试！');
       return false;
     }
   };
@@ -1183,14 +1184,15 @@ const TableListzsgc: React.FC = () => {
         visible={createModalVisible}
         onVisibleChange={setCreateModalVisible}
         onFinish={async (value) => {
-          setCreateModalVisible(false)
           const success = await handleAdd(value as TableListItem);
           if (success) {
             setCreateModalVisible(false)
             if (actionRef.current) {
               actionRef.current.reload();
             }
+            return true;
           }
+          return false;
           // setInitialValues({})
         }}
       >
