@@ -23,6 +23,7 @@ import {
 } from './service';
 import {PlusOutlined} from '@ant-design/icons';
 import type {TableListItem, TableListPagination} from './data';
+import {formatRowErrorMessages} from '@/utils/businessError';
 // import moment from 'moment';
 //@ts-ignore
 import {request} from 'umi';
@@ -474,8 +475,13 @@ const TableListzsgc: React.FC = () => {
     setGuanlianminjingjhreadonly(false)
 
     try {
-      await addinformationRule({...fields});
+      const res = await addinformationRule({...fields});
       hide();
+      const errorMessage = formatRowErrorMessages(res as any);
+      if (errorMessage) {
+        message.error(errorMessage);
+        return false;
+      }
       message.success('添加成功');
       return true;
     } catch (error) {

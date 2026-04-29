@@ -1411,7 +1411,7 @@ const TableListzsgc: React.FC = () => {
             placeholder="请录入姓名"
             rules={[
               {
-                required: true,
+                required: false,
                 message: '请录入姓名！',
               },
             ]}
@@ -1425,7 +1425,7 @@ const TableListzsgc: React.FC = () => {
             placeholder="请录入警号"
             rules={[
               {
-                required: true,
+                required: false,
                 message: '请录入警号！',
               },
             ]}
