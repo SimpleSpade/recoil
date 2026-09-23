@@ -20,6 +20,12 @@ export type TableListItem = {
   eventSolutionTime: string;
   staffPoliceUnit: string;
   eventChannelDesc: string;
+  eventDepartment?: string;
+  eventDepartmentServiceArea?: string;
+  eventSectionChiefName?: string;
+  eventSectionChiefPoliceid?: string;
+  eventSupervisingLeaderName?: string;
+  eventSupervisingLeaderPoliceid?: string;
   setSheshiminjingDetaildata: any;
   setYewuchangjingDetaildata: any;
   setWentileixingDetaildata: any;
@@ -58,8 +64,16 @@ export type sheshiminjingTableListItem = {
   policeName: string;
   staffPoliceid: string;
   staffPoliceUnit: string;
+  staffPeopleType: string;
   policeSolutionDesc: string;
   responsibilityResult: string;
+  staffPoliceProcessResult: string;
+  staffSectionChiefName: string;
+  staffSectionChiefPoliceid: string;
+  staffSupervisingLeaderName: string;
+  staffSupervisingLeaderPoliceid: string;
+  staffSupervisingOfficerName: string;
+  staffSupervisingOfficerPoliceid: string;
 };
 
 export type shijianbiaoqianTableListItem = {

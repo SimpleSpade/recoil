@@ -8,9 +8,8 @@ const { REACT_APP_ENV } = process.env;
 export default defineConfig({
   hash: true,
   antd: {},
-  mfsu: {
-    strategy: 'normal',
-  },
+  // 当前依赖组合在新版 Node 下会使 MFSU 预构建产物失效，开发时关闭以保证本地可访问。
+  mfsu: false,
   dva: {
     hmr: true,
   },
@@ -64,7 +63,6 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  mfsu: {},
   webpack5: {},
   exportStatic: {},
 });

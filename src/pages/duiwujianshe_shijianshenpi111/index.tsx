@@ -128,6 +128,8 @@ const TableListzsgc: React.FC = () => {
   const [bianjieventDesc, setBianjieventDesc] = useState<string>();
   const [bianjieventSolutionDesc, setBianjieventSolutionDesc] = useState<string>();
   const [bianjieventRectificationMeasures, setBianjieventRectificationMeasures] = useState<string>();
+  const [bianjieventDepartment, setBianjieventDepartment] = useState<string>();
+  const [bianjieventDepartmentServiceArea, setBianjieventDepartmentServiceArea] = useState<string>();
   const [bianjieventSectionChiefName, setBianjieventSectionChiefName] = useState<string>();
   const [bianjieventSectionChiefPoliceid, setBianjieventSectionChiefPoliceid] = useState<string>();
   const [bianjieventSupervisingLeaderName, setBianjieventSupervisingLeaderName] = useState<string>();
@@ -621,6 +623,8 @@ const TableListzsgc: React.FC = () => {
             setBianjieventDesc(record.eventDesc)
             setBianjieventSolutionDesc(record.eventSolutionDesc)
             setBianjieventRectificationMeasures(record.eventRectificationMeasures)
+            setBianjieventDepartment(record.eventDepartment)
+            setBianjieventDepartmentServiceArea(record.eventDepartmentServiceArea)
             setBianjieventSectionChiefName(record.eventSectionChiefName)
             setBianjieventSectionChiefPoliceid(record.eventSectionChiefPoliceid)
             setBianjieventSupervisingLeaderName(record.eventSupervisingLeaderName)
@@ -1367,6 +1371,24 @@ const TableListzsgc: React.FC = () => {
           </ProForm.Group>
         </ProForm.Group>
 
+        <ProForm.Group>
+          <ProFormText
+            label="事件所属单位"
+            width="md"
+            name="eventDepartment"
+            disabled={true}
+            initialValue={bianjieventDepartment}
+            placeholder=""
+          />
+          <ProFormText
+            label="事件对应派出所业务领域"
+            width="md"
+            name="eventDepartmentServiceArea"
+            disabled={true}
+            initialValue={bianjieventDepartmentServiceArea}
+            placeholder=""
+          />
+        </ProForm.Group>
         <ProForm.Group
           title={"事件所属二级科领导"}
         >

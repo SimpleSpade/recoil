@@ -20,7 +20,8 @@ const {ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION} = process.env;
  * current user access， if is '', user need login
  * 如果是 pro 的预览，默认是有权限的
  */
-let access = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site' ? 'admin' : 'yys' ? 'pcs' : 'kjk';
+// 本地开发默认使用全权限管理员，便于查看录入、审批、管理等全部页面。
+let access = '111';
 
 const getAccess = () => {
   return access;

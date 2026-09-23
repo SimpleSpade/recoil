@@ -40,6 +40,7 @@ import {
   ProForm, ProFormSelect,
   ProFormTextArea,
   ProFormText,
+  ProFormDependency,
   // DrawerForm,
   // ProFormDatePicker,
   // ProFormRadio,
@@ -96,6 +97,10 @@ import {updateinformationRule} from "@/pages/duiwujianshe_shijianluru111/service
 //   }
 // };
 
+const POLICE_STATION_DEPARTMENTS = new Set([
+  '华亭所', '南翔所', '叶城所', '唐行所', '嘉城所', '外冈所', '娄塘所', '安亭所', '封浜所', '徐行所',
+  '戬浜所', '新成所', '方泰所', '水上所', '江桥所', '真新所', '菊园所', '马陆所', '高校上赛所', '黄渡所',
+]);
 
 const TableListzsgc: React.FC = () => {
 
@@ -135,6 +140,12 @@ const TableListzsgc: React.FC = () => {
   const [bianjieventDesc, setBianjieventDesc] = useState<string>();
   const [bianjieventSolutionDesc, setBianjieventSolutionDesc] = useState<string>();
   const [bianjieventRectificationMeasures, setBianjieventRectificationMeasures] = useState<string>();
+  const [bianjieventDepartment, setBianjieventDepartment] = useState<string>();
+  const [bianjieventDepartmentServiceArea, setBianjieventDepartmentServiceArea] = useState<string>();
+  const [bianjieventSectionChiefName, setBianjieventSectionChiefName] = useState<string>();
+  const [bianjieventSectionChiefPoliceid, setBianjieventSectionChiefPoliceid] = useState<string>();
+  const [bianjieventSupervisingLeaderName, setBianjieventSupervisingLeaderName] = useState<string>();
+  const [bianjieventSupervisingLeaderPoliceid, setBianjieventSupervisingLeaderPoliceid] = useState<string>();
   const [complainantStaffPhoneNumifdisable, setComplainantStaffPhoneNumifdisable] = useState<boolean>(false);
 
   //回退
@@ -208,6 +219,15 @@ const TableListzsgc: React.FC = () => {
   const [wentileixingfromxlk, setWentileixingfromxlk] = useState([]);
   const [guanlianminjingchulijieguotablexlk, setGuanlianminjingchulijieguotablexlk] = useState({});
   const [guanlianrenyuanleixingtablexlk, setGuanlianrenyuanleixingtablexlk] = useState({});
+  const [eventDepartmentServiceAreatablexlk, setEventDepartmentServiceAreatablexlk] = useState({});
+  const eventOwningUnitOptions = Object.entries(guanlianminjingdanweitablexlk).map(([value, option]) => ({
+    value,
+    label: (option as { text?: string }).text ?? value,
+  }));
+  const eventDepartmentServiceAreaOptions = Object.entries(eventDepartmentServiceAreatablexlk).map(([value, option]) => ({
+    value,
+    label: (option as { text?: string }).text ?? value,
+  }));
   // const [shijianzerenbiaojitablexlk, setShijianzerenbiaojitablexlk] = useState({});
   //获得登录数据
   const {initialState} = useModel('@@initialState');
@@ -337,6 +357,8 @@ const TableListzsgc: React.FC = () => {
         setGuanlianminjingchulijieguotablexlk(res.glmjcljgcreatetablexlk)
         // @ts-ignore
         setGuanlianrenyuanleixingtablexlk(res.glrylxtablexlk)
+        // @ts-ignore
+        setEventDepartmentServiceAreatablexlk(res.sjdypcsywly ?? {})
 
         // setShijianzerenbiaojitablexlk(res.sjzrbjtablexlk)
 
@@ -746,6 +768,12 @@ const TableListzsgc: React.FC = () => {
             setBianjieventDesc(record.eventDesc)
             setBianjieventSolutionDesc(record.eventSolutionDesc)
             setBianjieventRectificationMeasures(record.eventRectificationMeasures)
+            setBianjieventDepartment(record.eventDepartment)
+            setBianjieventDepartmentServiceArea(record.eventDepartmentServiceArea)
+            setBianjieventSectionChiefName(record.eventSectionChiefName)
+            setBianjieventSectionChiefPoliceid(record.eventSectionChiefPoliceid)
+            setBianjieventSupervisingLeaderName(record.eventSupervisingLeaderName)
+            setBianjieventSupervisingLeaderPoliceid(record.eventSupervisingLeaderPoliceid)
             // setBianjieventTagName(record.eventTagName)
             // setBianjibutton(false)
             // setShanchubutton(false)
@@ -792,6 +820,7 @@ const TableListzsgc: React.FC = () => {
       valueType: 'textarea',
       align: 'center',
       hideInTable: false,
+      width: 200,
     },
 
     {
@@ -807,6 +836,7 @@ const TableListzsgc: React.FC = () => {
       valueType: 'textarea',
       align: 'center',
       hideInTable: false,
+      width: 200,
     },
     {
       title: '关联人员警号',
@@ -821,6 +851,7 @@ const TableListzsgc: React.FC = () => {
       valueType: 'textarea',
       align: 'center',
       hideInTable: false,
+      width: 200,
     },
     {
       title: '关联人员单位',
@@ -835,6 +866,7 @@ const TableListzsgc: React.FC = () => {
       align: 'center',
       hideInTable: false,
       valueEnum: guanlianminjingdanweitablexlk,
+      width: 200,
     },
     {
       title: '关联人员类型',
@@ -849,6 +881,7 @@ const TableListzsgc: React.FC = () => {
       align: 'center',
       hideInTable: false,
       valueEnum: guanlianrenyuanleixingtablexlk,
+      width: 200,
     },
     {
       title: '关联人员处理结果描述',
@@ -862,6 +895,7 @@ const TableListzsgc: React.FC = () => {
       valueType: 'textarea',
       align: 'center',
       hideInTable: false,
+      width: 200,
     },
     {
       title: '责任标识',
@@ -881,6 +915,7 @@ const TableListzsgc: React.FC = () => {
         2: {text: '需改进'},
         1: {text: '无责'},
       },
+      width: 200,
     },
     {
       title: '关联人员处理结果',
@@ -903,10 +938,75 @@ const TableListzsgc: React.FC = () => {
       },
     },
     {
+      title: '关联人员对应二级科领导姓名',
+      dataIndex: 'staffSectionChiefName',
+      search: false,
+      valueType: 'textarea',
+      align: 'center',
+      hideInTable: false,
+      width: 200,
+    },
+    {
+      title: '关联人员对应二级科领导警号',
+      dataIndex: 'staffSectionChiefPoliceid',
+      search: false,
+      valueType: 'textarea',
+      align: 'center',
+      hideInTable: false,
+      width: 200,
+    },
+    {
+      title: '关联人员对应本单位分管领导姓名',
+      dataIndex: 'staffSupervisingLeaderName',
+      formItemProps: () => {
+        return {
+          rules: [{required: true, message: '此项为必填项'}],
+        };
+      },
+      search: false,
+      valueType: 'textarea',
+      align: 'center',
+      hideInTable: false,
+      width: 200,
+    },
+    {
+      title: '关联人员对应本单位分管领导警号',
+      dataIndex: 'staffSupervisingLeaderPoliceid',
+      formItemProps: () => {
+        return {
+          rules: [{required: true, message: '此项为必填项'}],
+        };
+      },
+      search: false,
+      valueType: 'textarea',
+      align: 'center',
+      hideInTable: false,
+      width: 200,
+    },
+    {
+      title: '关联警辅对应带辅民警姓名',
+      dataIndex: 'staffSupervisingOfficerName',
+      search: false,
+      valueType: 'textarea',
+      align: 'center',
+      hideInTable: false,
+      width: 200,
+    },
+    {
+      title: '关联警辅对应带辅民警警号',
+      dataIndex: 'staffSupervisingOfficerPoliceid',
+      search: false,
+      valueType: 'textarea',
+      align: 'center',
+      hideInTable: false,
+      width: 200,
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       align: 'center',
+      width: 200,
       render: (text, record, _, action) => [
         <a
           key="editable1"
@@ -1537,6 +1637,75 @@ const TableListzsgc: React.FC = () => {
           </ProForm.Group>
         </ProForm.Group>
 
+        <ProFormDependency name={['eventDepartment']}>
+          {({eventDepartment}, form) => {
+            const isPoliceStationDepartment = POLICE_STATION_DEPARTMENTS.has(eventDepartment);
+            return (
+              <ProForm.Group>
+                <ProFormSelect
+                  width="md"
+                  name="eventDepartment"
+                  label="事件所属单位"
+                  initialValue={bianjieventDepartment}
+                  placeholder="请选择事件所属单位"
+                  options={eventOwningUnitOptions}
+                  rules={[{required: true, message: '请选择事件所属单位！'}]}
+                  fieldProps={{
+                    onChange: (value) => {
+                      if (!POLICE_STATION_DEPARTMENTS.has(value)) {
+                        form.setFieldsValue({eventDepartmentServiceArea: undefined});
+                      }
+                    },
+                  }}
+                />
+                <ProFormSelect
+                  width="md"
+                  name="eventDepartmentServiceArea"
+                  label="事件对应派出所业务领域"
+                  initialValue={bianjieventDepartmentServiceArea}
+                  placeholder={isPoliceStationDepartment ? '请选择事件对应派出所业务领域' : '非派出所单位无需选择'}
+                  options={eventDepartmentServiceAreaOptions}
+                  disabled={!isPoliceStationDepartment}
+                  rules={[{required: isPoliceStationDepartment, message: '请选择事件对应派出所业务领域！'}]}
+                />
+              </ProForm.Group>
+            );
+          }}
+        </ProFormDependency>
+        <ProForm.Group title={"事件所属二级科领导"}>
+          <ProFormText
+            label="姓名"
+            width="md"
+            name="eventSectionChiefName"
+            initialValue={bianjieventSectionChiefName}
+            placeholder="请录入姓名"
+          />
+          <ProFormText
+            label="警号"
+            width="md"
+            name="eventSectionChiefPoliceid"
+            initialValue={bianjieventSectionChiefPoliceid}
+            placeholder="请录入警号"
+          />
+        </ProForm.Group>
+        <ProForm.Group title={"事件所属单位分管领导"}>
+          <ProFormText
+            label="姓名"
+            width="md"
+            name="eventSupervisingLeaderName"
+            initialValue={bianjieventSupervisingLeaderName}
+            placeholder="请录入姓名"
+            rules={[{required: true, message: '请录入姓名！'}]}
+          />
+          <ProFormText
+            label="警号"
+            width="md"
+            name="eventSupervisingLeaderPoliceid"
+            initialValue={bianjieventSupervisingLeaderPoliceid}
+            placeholder="请录入警号"
+            rules={[{required: true, message: '请录入警号！'}]}
+          />
+        </ProForm.Group>
 
         {/*<EditableProTable<sheshiminjingTableListItem>*/}
         {/*  rowKey="id"*/}
@@ -1565,7 +1734,7 @@ const TableListzsgc: React.FC = () => {
         <EditableProTable<sheshiminjingTableListItem>
           rowKey="id"
           scroll={{
-            x: 1500,
+            x: 3100,
           }}
           editableFormRef={editorFormRef}
           formItemProps={{

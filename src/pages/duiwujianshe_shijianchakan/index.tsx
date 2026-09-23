@@ -137,6 +137,8 @@ const TableListzsgc: React.FC = () => {
   const [xiangqingeventCatelogDesc, setXiangqingeventCatelogDesc] = useState<string>();
   const [xiangqingeventSolutionDesc, setXiangqingeventSolutionDesc] = useState<string>();
   const [xiangqingeventRectificationMeasures, setXiangqingeventRectificationMeasures] = useState<string>();
+  const [xiangqingeventDepartment, setXiangqingeventDepartment] = useState<string>();
+  const [xiangqingeventDepartmentServiceArea, setXiangqingeventDepartmentServiceArea] = useState<string>();
   const [xiangqingeventSectionChiefName, setXiangqingeventSectionChiefName] = useState<string>();
   const [xiangqingeventSectionChiefPoliceid, setXiangqingeventSectionChiefPoliceid] = useState<string>();
   const [xiangqingeventSupervisingLeaderName, setXiangqingeventSupervisingLeaderName] = useState<string>();
@@ -620,6 +622,8 @@ const TableListzsgc: React.FC = () => {
             setXiangqingeventCatelogDesc(record.eventCatelogDesc)
             setXiangqingeventSolutionDesc(record.eventSolutionDesc)
             setXiangqingeventRectificationMeasures(record.eventRectificationMeasures)
+            setXiangqingeventDepartment(record.eventDepartment)
+            setXiangqingeventDepartmentServiceArea(record.eventDepartmentServiceArea)
             setXiangqingeventSectionChiefName(record.eventSectionChiefName)
             setXiangqingeventSectionChiefPoliceid(record.eventSectionChiefPoliceid)
             setXiangqingeventSupervisingLeaderName(record.eventSupervisingLeaderName)
@@ -1304,6 +1308,24 @@ const TableListzsgc: React.FC = () => {
               ]}
             />
           </ProForm.Group>
+        </ProForm.Group>
+        <ProForm.Group>
+          <ProFormText
+            label="事件所属单位"
+            width="md"
+            name="eventDepartment"
+            disabled={true}
+            initialValue={xiangqingeventDepartment}
+            placeholder=""
+          />
+          <ProFormText
+            label="事件对应派出所业务领域"
+            width="md"
+            name="eventDepartmentServiceArea"
+            disabled={true}
+            initialValue={xiangqingeventDepartmentServiceArea}
+            placeholder=""
+          />
         </ProForm.Group>
         <ProForm.Group
           title={"事件所属二级科领导"}

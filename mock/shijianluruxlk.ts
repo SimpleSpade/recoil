@@ -381,6 +381,14 @@ function getRule(req: Request, res: Response) {
         text: '关联民警单位2',
       },
     },
+    sjdypcsywly: {
+      治安: {text: '治安'},
+      社区: {text: '社区'},
+      交通: {text: '交通'},
+      巡逻: {text: '巡逻'},
+      综合指挥: {text: '综合指挥'},
+      队伍管理: {text: '队伍管理'}
+    },
 
   };
 

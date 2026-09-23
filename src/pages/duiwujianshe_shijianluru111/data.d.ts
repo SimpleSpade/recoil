@@ -10,6 +10,8 @@ export type TableListItem = {
   responsibilityResult: string;
   eventSolutionDesc: string;
   eventRectificationMeasures: string;
+  eventDepartment?: string;
+  eventDepartmentServiceArea?: string;
   eventSectionChiefName: string;
   eventSectionChiefPoliceid: string;
   eventSupervisingLeaderName: string;

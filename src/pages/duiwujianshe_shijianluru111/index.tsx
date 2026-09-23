@@ -33,7 +33,7 @@ import {
 } from '@ant-design/pro-components';
 import {
   ModalForm,
-  ProForm, ProFormSelect,
+  ProForm, ProFormDependency, ProFormSelect,
   ProFormTextArea,
   ProFormText,
   DrawerForm,
@@ -74,6 +74,11 @@ import ProCard from "@ant-design/pro-card";
  */
 
 
+
+const POLICE_STATION_DEPARTMENTS = new Set([
+  '华亭所', '南翔所', '叶城所', '唐行所', '嘉城所', '外冈所', '娄塘所', '安亭所', '封浜所', '徐行所',
+  '戬浜所', '新成所', '方泰所', '水上所', '江桥所', '真新所', '菊园所', '马陆所', '高校上赛所', '黄渡所',
+]);
 
 const TableListzsgc: React.FC = () => {
 
@@ -183,6 +188,8 @@ const TableListzsgc: React.FC = () => {
   const [bianjieventDesc, setBianjieventDesc] = useState<string>();
   const [bianjieventSolutionDesc, setBianjieventSolutionDesc] = useState<string>();
   const [bianjieventRectificationMeasures, setBianjieventRectificationMeasures] = useState<string>();
+  const [bianjieventDepartment, setBianjieventDepartment] = useState<string>();
+  const [bianjieventDepartmentServiceArea, setBianjieventDepartmentServiceArea] = useState<string>();
   const [bianjieventSectionChiefName, setBianjieventSectionChiefName] = useState<string>();
   const [bianjieventSectionChiefPoliceid, setBianjieventSectionChiefPoliceid] = useState<string>();
   const [bianjieventSupervisingLeaderName, setBianjieventSupervisingLeaderName] = useState<string>();
@@ -207,6 +214,8 @@ const TableListzsgc: React.FC = () => {
   const [xiangqingeventCatelogDesc, setXiangqingeventCatelogDesc] = useState<string>();
   const [xiangqingeventSolutionDesc, setXiangqingeventSolutionDesc] = useState<string>();
   const [xiangqingeventRectificationMeasures, setXiangqingeventRectificationMeasures] = useState<string>();
+  const [xiangqingeventDepartment, setXiangqingeventDepartment] = useState<string>();
+  const [xiangqingeventDepartmentServiceArea, setXiangqingeventDepartmentServiceArea] = useState<string>();
   const [xiangqingeventSectionChiefName, setXiangqingeventSectionChiefName] = useState<string>();
   const [xiangqingeventSectionChiefPoliceid, setXiangqingeventSectionChiefPoliceid] = useState<string>();
   const [xiangqingeventSupervisingLeaderName, setXiangqingeventSupervisingLeaderName] = useState<string>();
@@ -232,6 +241,17 @@ const TableListzsgc: React.FC = () => {
   const [guiyinfenxiformxlk, setGuiyinfenxiformxlk] = useState([]);
   const [guanlianminjingdanweitablexlk, setGuanlianminjingdanweitablexlk] = useState({});
   const [guanlianminjingchulijieguotablexlk, setGuanlianminjingchulijieguotablexlk] = useState({});
+  const [eventDepartmentServiceAreatablexlk, setEventDepartmentServiceAreatablexlk] = useState({});
+
+  // 事件所属单位与关联人员单位共用同一份下拉数据，避免新增接口。
+  const eventOwningUnitOptions = Object.entries(guanlianminjingdanweitablexlk).map(([value, option]) => ({
+    value,
+    label: (option as { text?: string }).text ?? value,
+  }));
+  const eventDepartmentServiceAreaOptions = Object.entries(eventDepartmentServiceAreatablexlk).map(([value, option]) => ({
+    value,
+    label: (option as { text?: string }).text ?? value,
+  }));
 
   const [guanlianrenyuanleixingtablexlk, setGuanlianrenyuanleixingtablexlk] = useState({});
   const [guanlianrenyuanleixingfromxlk, setGuanlianrenyuanleixingfromxlk] = useState([]);
@@ -335,6 +355,9 @@ const TableListzsgc: React.FC = () => {
         setGuiyinfenxiformxlk(res.gyfxfromdxlk)
         // @ts-ignore
         setGuanlianminjingdanweitablexlk(res.glmjdwcreatetablexlk)
+        // 事件对应派出所业务领域下拉，与关联人员单位使用同一接口返回的数据。
+        // @ts-ignore
+        setEventDepartmentServiceAreatablexlk(res.sjdypcsywly ?? {})
         // @ts-ignore
         setGuanlianminjingchulijieguotablexlk(res.glmjcljgcreatetablexlk)
         // @ts-ignore
@@ -917,6 +940,8 @@ const TableListzsgc: React.FC = () => {
             setBianjieventDesc(record.eventDesc)
             setBianjieventSolutionDesc(record.eventSolutionDesc)
             setBianjieventRectificationMeasures(record.eventRectificationMeasures)
+            setBianjieventDepartment(record.eventDepartment)
+            setBianjieventDepartmentServiceArea(record.eventDepartmentServiceArea)
             setBianjieventSectionChiefName(record.eventSectionChiefName)
             setBianjieventSectionChiefPoliceid(record.eventSectionChiefPoliceid)
             setBianjieventSupervisingLeaderName(record.eventSupervisingLeaderName)
@@ -952,6 +977,8 @@ const TableListzsgc: React.FC = () => {
             setXiangqingeventCatelogDesc(record.eventCatelogDesc)
             setXiangqingeventSolutionDesc(record.eventSolutionDesc)
             setXiangqingeventRectificationMeasures(record.eventRectificationMeasures)
+            setXiangqingeventDepartment(record.eventDepartment)
+            setXiangqingeventDepartmentServiceArea(record.eventDepartmentServiceArea)
             setXiangqingeventSectionChiefName(record.eventSectionChiefName)
             setXiangqingeventSectionChiefPoliceid(record.eventSectionChiefPoliceid)
             setXiangqingeventSupervisingLeaderName(record.eventSupervisingLeaderName)
@@ -2202,6 +2229,39 @@ const TableListzsgc: React.FC = () => {
             />
           </ProForm.Group>
         </ProForm.Group>
+        <ProFormDependency name={['eventDepartment']}>
+          {({eventDepartment}, form) => {
+            const isPoliceStationDepartment = POLICE_STATION_DEPARTMENTS.has(eventDepartment);
+            return (
+              <ProForm.Group>
+                <ProFormSelect
+                  width="md"
+                  name="eventDepartment"
+                  label="事件所属单位"
+                  placeholder="请选择事件所属单位"
+                  options={eventOwningUnitOptions}
+                  rules={[{required: true, message: '请选择事件所属单位！'}]}
+                  fieldProps={{
+                    onChange: (value) => {
+                      if (!POLICE_STATION_DEPARTMENTS.has(value)) {
+                        form.setFieldsValue({eventDepartmentServiceArea: undefined});
+                      }
+                    },
+                  }}
+                />
+                <ProFormSelect
+                  width="md"
+                  name="eventDepartmentServiceArea"
+                  label="事件对应派出所业务领域"
+                  placeholder={isPoliceStationDepartment ? '请选择事件对应派出所业务领域' : '非派出所单位无需选择'}
+                  options={eventDepartmentServiceAreaOptions}
+                  disabled={!isPoliceStationDepartment}
+                  rules={[{required: isPoliceStationDepartment, message: '请选择事件对应派出所业务领域！'}]}
+                />
+              </ProForm.Group>
+            );
+          }}
+        </ProFormDependency>
         <ProForm.Group
           title={"事件所属二级科领导"}
         >
@@ -2854,6 +2914,41 @@ const TableListzsgc: React.FC = () => {
             />
           </ProForm.Group>
         </ProForm.Group>
+        <ProFormDependency name={['eventDepartment']}>
+          {({eventDepartment}, form) => {
+            const isPoliceStationDepartment = POLICE_STATION_DEPARTMENTS.has(eventDepartment);
+            return (
+              <ProForm.Group>
+                <ProFormSelect
+                  width="md"
+                  name="eventDepartment"
+                  label="事件所属单位"
+                  initialValue={bianjieventDepartment}
+                  placeholder="请选择事件所属单位"
+                  options={eventOwningUnitOptions}
+                  rules={[{required: true, message: '请选择事件所属单位！'}]}
+                  fieldProps={{
+                    onChange: (value) => {
+                      if (!POLICE_STATION_DEPARTMENTS.has(value)) {
+                        form.setFieldsValue({eventDepartmentServiceArea: undefined});
+                      }
+                    },
+                  }}
+                />
+                <ProFormSelect
+                  width="md"
+                  name="eventDepartmentServiceArea"
+                  label="事件对应派出所业务领域"
+                  initialValue={bianjieventDepartmentServiceArea}
+                  placeholder={isPoliceStationDepartment ? '请选择事件对应派出所业务领域' : '非派出所单位无需选择'}
+                  options={eventDepartmentServiceAreaOptions}
+                  disabled={!isPoliceStationDepartment}
+                  rules={[{required: isPoliceStationDepartment, message: '请选择事件对应派出所业务领域！'}]}
+                />
+              </ProForm.Group>
+            );
+          }}
+        </ProFormDependency>
         <ProForm.Group
           title={"事件所属二级科领导"}
         >
@@ -3317,6 +3412,26 @@ const TableListzsgc: React.FC = () => {
               ]}
             />
           </ProForm.Group>
+        </ProForm.Group>
+        <ProForm.Group>
+          <ProFormSelect
+            width="md"
+            name="eventDepartment"
+            label="事件所属单位"
+            disabled={true}
+            initialValue={xiangqingeventDepartment}
+            options={eventOwningUnitOptions}
+            placeholder=""
+          />
+          <ProFormSelect
+            width="md"
+            name="eventDepartmentServiceArea"
+            label="事件对应派出所业务领域"
+            disabled={true}
+            initialValue={xiangqingeventDepartmentServiceArea}
+            options={eventDepartmentServiceAreaOptions}
+            placeholder=""
+          />
         </ProForm.Group>
         <ProForm.Group
           title={"事件所属二级科领导"}
