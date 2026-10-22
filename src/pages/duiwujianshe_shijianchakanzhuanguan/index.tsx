@@ -797,6 +797,34 @@ const TableListzsgc: React.FC = () => {
       ],
     },
   ];
+  // 【关联人员】姓名为「不明」的行（即通过「不明」按钮录入的身份不明人员），
+  // 其「关联人员对应本单位分管领导姓名」「关联人员对应本单位分管领导警号」不做必填校验。
+  const isBumingGuanlianrenyuan = (form: any, config: any) => {
+    const rowKeyPath = config?.rowKey;
+    const rowIndex = config?.rowIndex;
+    const formInstance = form || formRef?.current;
+    if (!formInstance) {
+      return false;
+    }
+    let rowData: any;
+    // 优先按当前编辑行的字段路径取值
+    if (Array.isArray(rowKeyPath)) {
+      rowData = formInstance.getFieldValue(rowKeyPath);
+    }
+    // 兜底：按行下标从整表数据中取值
+    if ((!rowData || rowData.policeName === undefined) && rowIndex !== undefined) {
+      const tableName = Array.isArray(rowKeyPath) ? rowKeyPath[0] : undefined;
+      const tableList = tableName ? formInstance.getFieldValue(tableName) : undefined;
+      if (Array.isArray(tableList)) {
+        rowData = tableList[rowIndex];
+      }
+    }
+    const policeName = rowData?.policeName === undefined || rowData?.policeName === null
+      ? ''
+      : String(rowData.policeName);
+    return policeName.trim() === '不明';
+  };
+
   const sheshiminjingcolumns: ProColumns<sheshiminjingTableListItem>[] = [
 
     {
@@ -958,7 +986,11 @@ const TableListzsgc: React.FC = () => {
     {
       title: '关联人员对应本单位分管领导姓名',
       dataIndex: 'staffSupervisingLeaderName',
-      formItemProps: () => {
+      formItemProps: (form: any, config: any) => {
+        // 关联人员姓名为「不明」时不必填
+        if (isBumingGuanlianrenyuan(form, config)) {
+          return {};
+        }
         return {
           rules: [{required: true, message: '此项为必填项'}],
         };
@@ -972,7 +1004,11 @@ const TableListzsgc: React.FC = () => {
     {
       title: '关联人员对应本单位分管领导警号',
       dataIndex: 'staffSupervisingLeaderPoliceid',
-      formItemProps: () => {
+      formItemProps: (form: any, config: any) => {
+        // 关联人员姓名为「不明」时不必填
+        if (isBumingGuanlianrenyuan(form, config)) {
+          return {};
+        }
         return {
           rules: [{required: true, message: '此项为必填项'}],
         };
